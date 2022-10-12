@@ -19,14 +19,12 @@ thumbnail : https://s2.loli.net/2022/10/12/6UcdDGSAHrwlvi1.png
 
 Hexo 作为一个静态的博客框架，相比于wordpress，也是有其轻便，速度快的优点，但是毕竟是静态的，部署起来并没有那么方便，如果在本地的话每次更新，都需要hexo clean -d, 会很麻烦。Github Actions 早在2018年就发布了最初的版本， 作为一个方便的可以持续集成部署的工具，我们可以用它来部署hexo，让blog以后的更新维护更加方便快捷。
 
-需要两个仓库，一个来放blog的源码， 一个放html, 如name.github.io 。
+需要两个仓库，一个来放blog的源码， 一个放html, 如`name.github.io` 。
 
 首先在git bash中运行：
 
-{% codeblock "生成密钥" lang: bash >folded %}
-
+{% codeblock "生成密钥" lang: yaml >folded %}
 ssh-keygen -t rsa -f github-deploy-key
-
 {% endcodeblock %}
 
 此时可以得到两个文件一个是 `github-deploy-key`, 另一个是`github-deploy-key.pub`, 首先复制`github-deploy-key`的内容然后，到博客的源码仓库，打开`Settings->Secrets->Actions`， 选择`New Secrets`，Name 填`HEXO_DEPLOY_PRI`,(这个后面文件会用到建议不做更改)，然后打开博客页面文件所在的仓库，打开`Settings->Deploy Key`， 选择`Add deploy key`， 名字填`HEXO_DEPLOY_PUB`, 把`github-deploy-key.pub`的内容复制进去。
@@ -35,8 +33,7 @@ ssh-keygen -t rsa -f github-deploy-key
 
 接下来就是配置Github Actions，根据注释修改内容， 填在`deploy.yml`， 中：
 
-{% codeblock "Actions" lang: bash >folded %}
-
+{% codeblock "Actions" lang: yaml  >folded %}
 name: Hexo deploy
 
 on:
@@ -99,7 +96,6 @@ jobs:
           hexo g
           hexo d
         #部署 depoly
-
 {% endcodeblock %}
 
 根据实际情况更改即可 ，推荐搭配GitHub的Cloud VSCode 使用效果更佳。
