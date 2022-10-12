@@ -1,0 +1,235 @@
+version: 5.1.0
+variant: default
+logo: https://s2.loli.net/2022/09/28/kowJmZvX3KVR1rx.png
+head:
+    favicon: https://s2.loli.net/2022/06/16/tYjEKklV2yFiIPx.jpg
+    
+    manifest:
+        name: Jekyllのblog
+        short_name: Jekyllのblog
+        start_url: https://jekyll-y.github.io/
+        theme_color: "#F19EC2"
+        background_color: "#F19EC2"
+        display: standalone
+        icons:
+            -
+                src: ''
+                sizes: ''
+                type: ''
+    open_graph:
+        title: 
+        type: 
+        url:
+        image: 
+        site_name: 
+        author: 
+        description: 
+        twitter_card: 
+        twitter_id: 
+        twitter_site: 
+        google_plus: 
+        fb_admins: 
+        fb_app_id: 
+    structured_data:
+        title: 
+        description: 
+        url: 
+        author: 
+        publisher: 
+        publisher_logo:  
+        image: 
+    meta:
+        - ''
+    rss: 
+navbar:
+    menu:
+        Home: /
+        Archives: /archives
+        Categories: /categories
+        Tags: /tags
+        About: /about
+        Friends: /friends
+        Comments: /comments
+    links:
+        Download on GitHub:
+            icon: fab fa-github
+            url: https://github.com/ppoffice/hexo-theme-icarus
+footer:
+    links:
+        Creative Commons:
+            icon: fab fa-creative-commons
+            url: https://creativecommons.org/
+        Attribution 4.0 International:
+            icon: fab fa-creative-commons-by
+            url: https://creativecommons.org/licenses/by/4.0/
+        Download on GitHub:
+            icon: fab fa-github
+            url: https://github.com/ppoffice/hexo-theme-icarus
+article:
+    highlight:
+        theme: atom-one-light
+        clipboard: true
+        fold: folded
+    readtime: true
+    update_time: true
+    licenses:
+        Creative Commons:
+            icon: fab fa-creative-commons
+            url: https://creativecommons.org/
+        Attribution:
+            icon: fab fa-creative-commons-by
+            url: https://creativecommons.org/licenses/by/4.0/
+        Noncommercial:
+            icon: fab fa-creative-commons-nc
+            url: https://creativecommons.org/licenses/by-nc/4.0/
+search:
+    type: insight
+    index_pages: true
+comment:
+    type: gitalk
+    client_id: 46657b1448b45a4d269a
+    client_secret: a3e37ffa59eb71a7d5b40fa8f572c521ae1bbc4f
+    repo: blogcomment
+    owner: Jekyll-Y
+    admin:
+        - Jekyll-Y
+    per_page: 20                    # 可选填
+    distraction_free_mode: false    # 可选填
+    pager_direction: last           # 可选填
+    create_issue_manually: false    # 可选填
+    proxy:                          # 可选填
+    flip_move_options:              # 可选填
+    enable_hotkey: true             # 可选填
+    language: zh-CN                 # 可选填
+# donates:
+#     -
+#         type: afdian
+#         url: ''
+#     -
+#         type: alipay
+#         qrcode: ''
+#     -
+#         type: buymeacoffee
+#         url: ''
+#     -
+#         type: patreon
+#         url: ''
+#     -
+#         type: paypal
+#         business: ''
+#         currency_code: USD
+#     -
+#         type: wechat
+#         qrcode: ''
+# share:
+#     type: sharethis
+#     install_url: ''
+sidebar:
+    left:
+        sticky: false
+    right:
+        sticky: false
+widgets:
+    -
+        position: left
+        type: profile
+        author: Jekyll
+        author_title: Doctor,您还有很多事情要做,现在还不能休息哦.
+        location: Rhodes Island
+        avatar: https://s2.loli.net/2022/07/14/AoS2kdrhx18TLON.jpg
+        avatar_rounded: true
+        gravatar: 
+        follow_link: https://github.com/Jekyll-Y
+        social_links:
+            Github:
+                icon: fab fa-github
+                url: https://github.com/Jekyll-Y
+            # Facebook:
+            #     icon: fab fa-facebook
+            #     url: https://facebook.com
+            # Twitter:
+            #     icon: fab fa-twitter
+            #     url: https://twitter.com
+            # Dribbble:
+            #     icon: fab fa-dribbble
+            #     url: https://dribbble.com
+            # RSS:
+            #     icon: fas fa-rss
+            #     url: /
+    -
+        position: left
+        type: toc
+        index: true
+        collapsed: true
+        depth: 3
+    -
+        position: left
+        type: links
+        links:
+            Hexo: https://hexo.io
+    -
+        position: left
+        type: categories
+    -
+        position: right
+        type: recent_posts
+    -
+        position: right
+        type: archives
+    -
+        position: right
+        type: tags
+        order_by: name
+        amount: 
+        show_count: true
+    -
+        position: left
+        type: subscribe_email
+        description: 
+        feedburner_id: ''
+    # -
+    #     position: left
+    #     type: adsense
+    #     client_id: ''
+    #     slot_id: ''
+    # -
+    #     position: left
+    #     type: followit
+    #     description: 
+    #     action_url: ''
+    #     verification_code: ''
+plugins:
+    animejs: true
+    back_to_top: true
+    baidu_analytics:
+        tracking_id: 
+    bing_webmaster:
+        tracking_id: 
+    busuanzi: true
+    cnzz:
+        id: 
+        web_id: 
+    cookie_consent:
+        type: info
+        theme: edgeless
+        static: true
+        position: bottom-left
+        policyLink: https://www.cookiesandyou.com/
+    gallery: true
+    # google_analytics:
+    #     tracking_id: 
+    # hotjar:
+    #     site_id: 
+    katex: true
+    mathjax: false
+    outdated_browser: false
+    progressbar: true
+    statcounter:
+        project: 
+        security: 
+    twitter_conversion_tracking:
+        pixel_id: 
+providers:
+    cdn: jsdelivr
+    fontcdn: google
+    iconcdn: fontawesome

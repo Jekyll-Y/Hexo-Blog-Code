@@ -1,0 +1,50 @@
+const { Component } = require('inferno');
+const classname = require('hexo-component-inferno/lib/util/classname');
+const Head = require('./common/head');
+const Navbar = require('./common/navbar');
+const Widgets = require('./common/widgets');
+const Footer = require('./common/footer');
+const Scripts = require('./common/scripts');
+const Search = require('./common/search');
+
+module.exports = class extends Component {
+    render() {
+        const { site, config, page, helper, body } = this.props;
+
+        const language = page.lang || page.language || config.language;
+        const columnCount = Widgets.getColumnCount(config.widgets, config, page);
+
+        return <html lang={language ? language.substr(0, 2) : ''}>
+            <Head site={site} config={config} helper={helper} page={page} />
+            {/* <body class={`is-${columnCount}-column`}> */}
+            <body class={`is-3-column`}>
+                <Navbar config={config} helper={helper} page={page} />
+                <section class="section">
+                    <div class="container">
+                        <div class="columns">
+                            <div class={classname({
+                                column: true,
+                                'order-2': true,
+                                'column-main': true,
+                                'is-12': columnCount === 1,
+                                // 'is-8-tablet is-8-desktop is-8-widescreen': columnCount === 2,
+                                'is-8-tablet is-8-desktop is-9-widescreen': columnCount === 2,
+                                'is-8-tablet is-8-desktop is-6-widescreen': columnCount === 3
+                            })} dangerouslySetInnerHTML={{ __html: body }}></div>
+                            <Widgets site={site} config={config} helper={helper} page={page} position={'left'} />
+                            <Widgets site={site} config={config} helper={helper} page={page} position={'right'} />
+                        </div>
+                    </div>
+                </section>
+                <Footer config={config} helper={helper} />
+                <Scripts site={site} config={config} helper={helper} page={page} />
+                <Search config={config} helper={helper} />
+                {/* <script type="text/javascript" color="30,144,255" opacity='0.5' zIndex="-1" count="150" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script> */}
+            </body>
+        </html>;
+    }
+};
+{/* <canvas class="fireworks" style="position: fixed;left: 0;top: 0;z-index: 1; pointer-events: none;" ></canvas> 
+            <script type="text/javascript" src="//cdn.bootcss.com/animejs/2.2.0/anime.min.js"></script> 
+            <script type="text/javascript" src="/js/firework.js"></script> */}
+
