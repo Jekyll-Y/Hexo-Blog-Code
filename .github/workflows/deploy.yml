@@ -53,6 +53,7 @@ jobs:
         run: |
           npm install
           npm install hexo-cli -g
+          npm install -S hexo-theme-icarus hexo-renderer-inferno
 
       - name: Deploy hexo
         run: |
