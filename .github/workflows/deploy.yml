@@ -33,7 +33,7 @@ jobs:
           path: .deploy_git
 
       - name: Use Node.js ${{ matrix.node_version }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v1.13
         with:
           node-version: ${{ matrix.node_version }}
 
