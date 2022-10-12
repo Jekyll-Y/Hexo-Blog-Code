@@ -1,40 +1,59 @@
-name: Hexo Deploy
+name: CI
 
 on:
   push:
     branches:
       - main
 
+env:
+  GIT_USER: Jekyll-Y
+  GIT_EMAIL: 2899309225@qq.com
+  DEPLOY_REPO: jekyll-y.github.io
+  DEPLOY_BRANCH: main
+
 jobs:
   build:
-    runs-on: ubuntu-18.04
-    if: github.event.repository.owner.id == github.event.sender.id
+    name: Build on node ${{ matrix.node_version }} and ${{ matrix.os }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        node_version: [12.x]
 
     steps:
-      - name: Checkout source
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Checkout deploy repo
         uses: actions/checkout@v2
         with:
-          ref: main
+          repository: ${{ env.DEPLOY_REPO }}
+          ref: ${{ env.DEPLOY_BRANCH }}
+          path: .deploy_git
 
-      - name: Setup Node.js
+      - name: Use Node.js ${{ matrix.node_version }}
         uses: actions/setup-node@v1
         with:
-          node-version: '12'
+          node-version: ${{ matrix.node_version }}
 
-      - name: Setup Hexo
+      - name: Configuration environment
         env:
-          ACTION_DEPLOY_KEY: ${{ secrets.HEXO_DEPLOY_KEY }}
+          HEXO_DEPLOY_PRI: ${{secrets.HEXO_DEPLOY_PRI}}
         run: |
+          sudo timedatectl set-timezone "Asia/Shanghai"
           mkdir -p ~/.ssh/
-          echo "$ACTION_DEPLOY_KEY" > ~/.ssh/id_rsa
-          chmod 700 ~/.ssh
+          echo "$HEXO_DEPLOY_PRI" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan github.com >> ~/.ssh/known_hosts
-          git config --global user.email "2899309225@qq.com"
           git config --global user.name "Jekyll-Y"
-          npm install hexo-cli -g
+          git config --global user.email "2899309225@qq.com"
+
+      - name: Install dependencies
+        run: |
           npm install
-      - name: Deploy
+
+      - name: Deploy hexo
         run: |
           hexo clean
           hexo g
