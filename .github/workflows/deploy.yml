@@ -8,7 +8,7 @@ on:
 env:
   GIT_USER: Jekyll-Y
   GIT_EMAIL: 2899309225@qq.com
-  DEPLOY_REPO: jekyll-y.github.io
+  DEPLOY_REPO: Jekyll-Y/jekyll-y.github.io
   DEPLOY_BRANCH: main
 
 jobs:
