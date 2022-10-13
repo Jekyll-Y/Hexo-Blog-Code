@@ -10,6 +10,8 @@ toc: true
 categories : 
 - 做题记录
 
+sticky: 1
+
 ---
 
 Solve ARC Problems Record
