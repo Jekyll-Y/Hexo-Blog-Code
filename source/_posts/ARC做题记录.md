@@ -298,3 +298,212 @@ int main()
     return 0;
 }
 ~~~
+
+## ARC059
+
+### C.Be Together
+
+**Difficulty**: $\color{brown} 712$
+
+直接枚举即可，时间复杂度$O(n^2)$
+
+~~~c++
+#include <bits/stdc++.h>
+
+using namespace std;
+
+const int N = 110;
+
+int n;
+
+int a[N];
+
+int cost(int x, int y)
+{
+    return (x - y) * (x - y);
+}
+
+int main()
+{
+    scanf("%d", &n);
+    for(int i = 1; i <= n; i++)
+        scanf("%d", &a[i]);
+    int ans = 1e9;
+    for(int i = -100; i <= 100; i++)
+    {
+        int sum = 0;
+        for(int j = 1; j <= n; j++)
+            sum += cost(a[j], i);
+        ans = min(ans, sum);
+    }
+    printf("%d", ans);
+    return 0;
+}
+~~~
+
+### D.Unbalanced
+
+**Difficulty** : $\color{cyan} 1374$
+
+其实手玩一下就可以发现出现相邻的相同的或间隔一个相同的就会满足要求，时间复杂度$O(n)$
+
+~~~c++
+#include <bits/stdc++.h>
+
+using namespace std;
+
+const int N = 1e5 + 10;
+
+char s[N];
+
+int n;
+
+int main()
+{
+    scanf("%s", s + 1);
+    n = strlen(s + 1);
+    bool res = true;
+    for(int i = 2; i <= n; i++)
+    {
+        if(s[i] == s[i - 1])
+        {
+            res = false;
+            printf("%d %d", i - 1, i);
+            break;
+        }
+    }
+    if(res)
+    {
+        for(int i = 3; i <= n; i++)
+        {
+            if(s[i] == s[i - 2])
+            {
+                res = false;
+                printf("%d %d", i - 2, i);
+                break;
+            }
+        }
+    }
+    if(res)printf("-1 -1");
+    return 0;
+}
+~~~
+
+### E.Children and Candies
+
+**Difficulty**: $\color{yellow}2189$
+
+~~一开始被一坨sigma搞不会了~~, 其实就是个dp, 设$f_{i, j}$表示前$i$个人， 分到了$j$个糖果的答案，可以得到转移
+$$
+
+f_{i, j} = \sum_{k = 0} ^ j \bigg ( f_{i - 1, j - k} \times \sum_{x = a_i} ^ {b_i} x ^ k  \bigg)
+
+$$
+
+表示当前选了$k$个，然后其对答案的贡献。
+
+时间复杂度$O(n^3)$
+
+~~~c++
+#include <bits/stdc++.h>
+
+using namespace std;
+
+#define int long long
+
+const int mod = 1e9 + 7;
+const int N = 410;
+
+int n, m;
+
+int a[N], b[N];
+
+int f[N][N];
+
+int qpow(int a, int b)
+{
+    int t = 1;
+    while(b != 0)
+    {
+        if(b & 1)t = t * a % mod;
+        a = a * a % mod; b >>= 1;
+    }
+    return t;
+}
+
+int sum[N][N];
+
+signed main()
+{
+    scanf("%lld%lld", &n, &m);
+    for(int i = 1; i <= n; i++)
+        scanf("%lld", &a[i]);
+    for(int i = 1; i <= n; i++)
+        scanf("%lld", &b[i]);
+    for(int i = 1; i <= n; i++)
+        for(int k = 0; k <= m; k++)
+            for(int j = a[i]; j <= b[i]; j++)
+                sum[i][k] = (sum[i][k] + qpow(j, k)) % mod;
+    f[0][0] = 1;
+    for(int i = 1; i <= n; i++)
+        for(int j = 0; j <= m; j++)
+            for(int k = 0; k <= j; k++)
+                f[i][j] = (f[i][j] + f[i - 1][j - k] * sum[i][k] % mod) % mod;
+    printf("%lld", f[n][m]);
+    return 0;
+}
+~~~
+
+### F.Unhappy Hacking
+
+**Difficulty**: $\color{orange} 2427$
+
+其实挺简单的，一开始想麻烦了，设$f_{i, j}$表示当前使用了$i$次操作，匹配到了$j$个字符，对于转移可以分为两种，首先是选填$0, 1$，
+$$
+f_{i, j} = f_{i, j} + f_{i - 1, j - 1}
+$$
+
+如果选择删除操作， 其实就可以从上次操作的$j + 1$个位置转移过来，由于不限制$0, 1$， 要乘以$2$
+
+$$
+f_{i, j} = f_{i, j} + 2 \times f_{i - 1, j + 1}
+$$
+
+注意为空时可以使用删除操作。
+
+时间复杂度$O(n ^ 2)$
+
+~~~c++
+#include <bits/stdc++.h>
+
+using namespace std;
+
+#define int long long
+
+const int N = 5100;
+const int mod = 1e9 + 7;
+
+int n;
+
+char s[N];
+
+int f[N][N];
+
+signed main()
+{
+    scanf("%lld%s", &n, s + 1);
+    int m = strlen(s + 1);
+    f[0][0] = 1;
+    for(int i = 1; i <= n; i++)
+    {
+        for(int j = 0; j <= i; j++)
+        {
+            if(j > 0)f[i][j] = (f[i][j] + f[i - 1][j - 1]) % mod;
+            else f[i][j] = (f[i][j] + f[i - 1][0]) % mod;
+            f[i][j] = (f[i][j] + 2 * f[i - 1][j + 1]) % mod;
+        }
+    }
+    printf("%lld", f[n][m]);
+    return 0;
+}
+~~~
