@@ -12,7 +12,7 @@ categories :
 
 ---
 
-Solve ARC problems Record
+Solve ARC Problems Record
 
 <!--more-->
 
