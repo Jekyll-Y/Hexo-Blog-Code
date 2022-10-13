@@ -12,9 +12,11 @@ categories :
 
 ---
 
-# ARC做题记录
-
 Solve ARC problems Record
+
+<!--more-->
+
+# ARC做题记录
 
 ## ARC058
 
