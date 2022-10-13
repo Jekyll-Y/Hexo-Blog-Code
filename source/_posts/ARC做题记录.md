@@ -301,7 +301,7 @@ int main()
 
 ## ARC059
 
-### C.Be Together
+### C.Being Together
 
 **Difficulty**: $\color{brown} 712$
 
