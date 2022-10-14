@@ -509,3 +509,275 @@ signed main()
     return 0;
 }
 ~~~
+
+## ARC060
+
+### C.Tak and Cards
+
+**Difficulty**: $\color{cyan} 1583$
+
+首先将每个数减去平均数，将问题转化为选出若干个数使其和为$0$的方案数， 可以使用折半搜索，时间复杂度$O(n^{\frac{n}{2}})$。
+
+~~~c++
+#include <bits/stdc++.h>
+#include <unordered_map>
+
+using namespace std;
+
+#define int long long
+
+const int N = 60;
+
+int n, m;
+
+int a[N];
+
+unordered_map<int, int> vis;
+
+int ans;
+
+void dfs1(int x, int lim, int sum)
+{
+    if(x > lim)
+    {
+        vis[sum]++;
+        return;
+    }
+    dfs1(x + 1, lim, sum);
+    dfs1(x + 1, lim, sum + a[x]);
+}
+
+void dfs2(int x, int lim, int sum)
+{
+    if(x > lim)
+    {
+        ans += vis[-sum];
+        return;
+    }
+    dfs2(x + 1, lim, sum);
+    dfs2(x + 1, lim, sum + a[x]);
+}
+
+signed main()
+{
+    scanf("%lld%lld", &n, &m);
+    for(int i = 1; i <= n; i++)
+        scanf("%lld", &a[i]);
+    sort(a + 1, a + n + 1);
+    for(int i = 1; i <= n; i++)
+        a[i] -= m;
+    int mid = n >> 1;
+    dfs1(1, mid, 0);
+    dfs2(mid + 1, n, 0);
+    printf("%lld", ans - 1);
+    return 0;
+}
+~~~
+
+### D.Digit Sum
+
+**Difficulty**: $\color{yellow} 2261$
+
+可以使用根号分治，当$d \le \sqrt n$的时候，直接暴力枚举，$d > \sqrt n$时，$n = k b + x, s = k + x$, $n - s$为$b - 1$的倍数，枚举约数即可，有一些特殊情况需要特判。
+
+时间复杂度$O(\sqrt n)$
+
+~~~c++
+#include <bits/stdc++.h>
+
+using namespace std;
+
+#define int long long
+
+int n, m;
+
+int f(int b, int n)
+{
+    if(!n)return 0;
+    return f(b, n / b) + n % b;
+}
+
+int ans = 1e18;
+
+signed main()
+{
+    scanf("%lld%lld", &n, &m);
+    bool res = false;
+    int mid = 1e6;
+    for(int i = 2; i <= mid; i++)
+    {
+        if(f(i, n) == m)
+        {
+            res = true;
+            ans = i;
+            break;
+        }
+    }
+    if(!res)
+    {
+        for(int i = 1; i * i <= n - m; i++)
+        {
+            if((n - m) % i)continue;
+            if(f(i + 1, n) == m)
+            {
+                res = true;
+                ans = i + 1;
+                break;
+            }
+            if(f((n - m) / i + 1, n) == m)
+            {
+                ans = min(ans,(n - m) / i + 1);
+                res = true;
+            }
+        }
+    }
+    if(!res)
+    {
+        for(int i = n;i >= 2 && i <= n + 10; i++)
+            if(f(i, n) == m)
+                {ans = i, res = true; break;}
+    }
+    if(!res)ans = -1;
+    printf("%lld", ans);
+    return 0;
+}
+~~~
+
+### E.Tak and Hotels
+
+**Difficulty**: $\color{yellow} 2154$
+
+直接倍增处理即可时间复杂度$O(q \log n)$
+
+~~~c++
+#include <bits/stdc++.h>
+
+using namespace std;
+
+const int N = 1e5 + 10;
+
+int n, m, q;
+
+int pos[N];
+
+int f[N][26];
+
+int query(int a, int b)
+{
+    int sum = 0, cur = a;
+    for(int i = 25; i >= 0; i--)
+    {
+        if(f[cur][i] >= b)continue;
+        cur = f[cur][i]; sum += (1 << i);
+    }
+    sum++;
+    return sum;
+}
+
+int main()
+{
+    scanf("%d", &n);
+    for(int i = 1; i <= n; i++)
+        scanf("%d", &pos[i]);
+    scanf("%d", &m);
+    for(int i = 1; i <= n; i++)
+    {
+        int x = lower_bound(pos + 1, pos + n + 1, pos[i] + m + 1) - pos;
+        f[i][0] = x - 1;
+    }
+    for(int j = 1; j <= 25; j++)
+        for(int i = 1; i <= n; i++)
+        {
+            if(f[i][j - 1] >= n)f[i][j] = n + 1;
+            else f[i][j] = f[f[i][j - 1]][j - 1];
+        }
+    scanf("%d", &q);
+    while(q--)
+    {
+        int a, b;
+        scanf("%d%d", &a, &b);
+        if(a > b)swap(a, b);
+        printf("%d\n", query(a, b));
+    }
+    return 0;
+}
+~~~
+
+### F.Best Representation
+
+**Difficulty**: $\color{red} 2804$
+
+~~诈骗题~~
+
+一道诈骗题，模数根本就没用到， 也没特殊性质， 还以为是dp， 其实除了全是相同字母的字符串， 其他的要么为$1$，要么为$2$，很显然，然后kmp， 判循环节，统计方案就可以了。
+
+~~~c++
+#include <bits/stdc++.h>
+
+using namespace std;
+
+#define int long long
+
+const int N = 5e5 + 10;
+const int mod = 1e9 + 7;
+
+int n;
+
+char s[N];
+
+bool check1()
+{
+    for(int i = 2; i <= n; i++)
+        if(s[i] != s[i - 1])return false;
+    return true;
+}
+
+bool check2(int *f, int i)
+{
+    if((f[i] << 1) < i)
+        return true;
+    else return i % (i - f[i]);
+}
+
+int fnxt[N], gnxt[N];
+
+signed main()
+{
+    scanf("%s", s + 1);
+    n = strlen(s + 1);
+    if(check1())
+    {
+        printf("%d\n1", n);
+        return 0;
+    }
+    for(int i = 2, j = 0; i <= n; i++)
+    {
+        while(j && s[i] != s[j + 1])
+            j = fnxt[j];
+        if(s[i] == s[j + 1]) j++;
+        fnxt[i] = j;
+    }
+    reverse(s + 1, s + n + 1);
+    for(int i = 2, j = 0; i <= n; i++)
+    {
+        while(j && s[i] != s[j + 1])
+            j = gnxt[j];
+        if(s[i] == s[j + 1]) j++;
+        gnxt[i] = j;
+    }
+    if(check2(fnxt, n))
+    {
+        printf("1\n1");
+        return 0;
+    }
+    int ans = 0;
+    for(int i = 1; i < n; i++)
+    {
+        int x = i, y = n - i;
+        if(check2(fnxt, x) && check2(gnxt, y))
+            ans++;
+    }
+    printf("2\n%d", ans);
+    return 0;
+}
+~~~
