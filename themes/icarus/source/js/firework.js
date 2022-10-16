@@ -15,7 +15,7 @@ function setParticuleDirection(e) {
 function createParticule(e, t) {
 	var a = {};
     // 修改粒子大小
-	return a.x = e, a.y = t, a.color = colors[anime.random(0, colors.length - 1)], a.radius = anime.random(6, 12), a.endPos = setParticuleDirection(a), a.draw = function() {
+	return a.x = e, a.y = t, a.color = colors[anime.random(0, colors.length - 1)], a.radius = anime.random(6, 24), a.endPos = setParticuleDirection(a), a.draw = function() {
 		ctx.beginPath(), ctx.arc(a.x, a.y, a.radius, 0, 2 * Math.PI, !0), ctx.fillStyle = a.color, ctx.fill()
 	}, a
 }
