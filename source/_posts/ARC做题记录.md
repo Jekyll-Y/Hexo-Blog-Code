@@ -781,3 +781,335 @@ signed main()
     return 0;
 }
 ~~~
+
+## ARC061
+
+### C.Many Formulas
+
+**Difficulty**: $\color{green} 1089$
+
+搜索即可，时间复杂度$O(2 ^ n)$。
+
+~~~c++
+#include <bits/stdc++.h>
+
+using namespace std;
+
+#define int long long
+
+int n;
+
+char s[15];
+
+int num[15][15];
+
+int ans = 0;
+
+bool vis[15];
+
+void dfs(int x)
+{
+    if(x >= n)
+    {
+        int sum = 0;
+        int lst = 1;
+        for(int i = 1; i <= n; i++)
+        {
+            if(vis[i])
+            {
+                sum += num[lst][i];
+                lst = i + 1;
+            }
+        }
+        ans += sum;
+        return;
+    }
+    dfs(x + 1);
+    vis[x] = true;
+    dfs(x + 1);
+    vis[x] = false;
+}
+
+signed main()
+{
+    scanf("%s", s + 1);
+    n = strlen(s + 1);
+    for(int i = 1; i <= n; i++)
+    {
+        int sum = 0;
+        for(int j = i; j <= n; j++)
+        {
+            sum = sum * 10 + s[j] - '0';
+            num[i][j] = sum;
+        }
+    }
+    vis[n] = true;
+    dfs(1);
+    printf("%lld", ans);
+    return 0;
+}
+~~~
+
+### D.Snuke's Coloring
+
+**Difficulty**: $\color{blue} 1682$
+
+只考虑每个矩形的左上角，然后考虑每个黑点对每个矩形的贡献， 然后枚举即可，时间复杂度$O(n)$。
+
+~~~c++
+#include <bits/stdc++.h>
+
+using namespace std;
+
+#define int long long
+
+const int N = 1e5 + 10;
+
+int n, h, w;
+
+struct node
+{
+    int x, y;
+    node(int a = 0, int b = 0) : x(a), y(b) {}
+    friend bool operator < (node a, node b){return a.x == b.x ? a.y < b.y : a.x < b.x;}
+};
+
+map <node, int> id;
+
+int b[N * 100];
+
+int cnt;
+
+void paint(int x, int y)
+{
+    for(int i = x - 2; i <= x; i++)
+    {
+        for(int j = y - 2; j <= y; j++)
+        {
+            if(i < 1 || j < 1 || i + 2 > h || j + 2 > w)
+                continue;
+            if(id[node(i, j)] == 0)
+                id[node(i, j)] = ++cnt;
+            b[id[node(i, j)]]++;
+        }
+    }
+}
+
+int ans[10];
+
+signed main()
+{
+    scanf("%lld%lld%lld", &h, &w, &n);
+    for(int i = 1; i <= n; i++)
+    {
+        int x, y;
+        scanf("%lld%lld", &x, &y);
+        paint(x, y);
+    }
+    for(int i = 1; i <= cnt; i++)
+        ans[b[i]]++;
+    int sum = 0;
+    for(int i = 1; i <= 9; i++)
+        sum += ans[i];
+    ans[0] = max(0ll, (h - 2) * (w - 2) - sum);
+    for(int i = 0; i <= 9; i++)
+        printf("%lld\n", ans[i]);
+    return 0;
+}
+~~~
+
+### E.Snuke's Subway Trip
+
+**Difficulty**: $\color{orange} 2502$
+
+首先可以想到新建虚点然后，在每个连通块中跑最短路， 但是这样建的边数是$n^2$级别的，我们可以换一种建边方式，将每个边拆成一个点，然后建边，这样的话其实就是将费用拆成了两个$0.5$最后需要，除以$2$，建边的复杂度为$n + 2 \times m$级别的。 跑最短路即可。
+
+~~~c++
+#include <bits/stdc++.h>
+
+using namespace std;
+
+#define int long long
+
+const int N = 1e6 + 10;
+const int INF = 0x3f3f3f3f3f3f3f3f;
+
+int cnt, head[N];
+
+struct edge
+{
+    int to, nxt, cost;
+    edge(int v = 0, int x = 0, int c = 0) : to(v), nxt(x), cost(c) {}
+};
+
+edge e[N << 1];
+
+void add(int u, int v, int c)
+{
+    e[++cnt] = edge(v, head[u], c); head[u] = cnt;
+    e[++cnt] = edge(u, head[v], c); head[v] = cnt;
+}
+
+struct node
+{
+    int x, y;
+    node(int a = 0, int b = 0) : x(a), y(b) {}
+    friend bool operator < (node a, node b){return a.x == b.x ? a.y < b.y : a.x < b.x;}
+};
+
+int n, m;
+
+int tot;
+
+map <node, int> f;
+
+map <node, int> g;
+
+int find(int x, int y)
+{
+    if(f[node(x, y)])return f[node(x, y)];
+    else return f[node(x, y)] = ++tot;
+}
+
+bool check(int x, int y)
+{
+    return g[node(x, y)] | g[node(y, x)];
+}
+
+int dis[N];
+
+bool vis[N];
+
+int bfs()
+{
+    memset(dis, INF, sizeof(dis));
+    memset(vis, false, sizeof(vis));
+    dis[1] = 0; vis[1] = true;
+    queue <int> q; q.push(1);
+    while(!q.empty())
+    {
+        int x = q.front(); q.pop();
+        vis[x] = false;
+        for(int i = head[x]; i; i = e[i].nxt)
+        {
+            int v = e[i].to, c = e[i].cost;
+            if(dis[x] + c < dis[v])
+            {
+                dis[v] = dis[x] + c;
+                if(!vis[v])
+                {
+                    vis[v] = true;
+                    q.push(v);
+                }
+            }
+        }
+    }
+    return dis[n];
+}
+
+signed main()
+{
+    scanf("%lld%lld", &n, &m);
+    tot = n;
+    for(int i = 1; i <= m; i++)
+    {
+        int x, y, z;
+        scanf("%lld%lld%lld", &x, &y, &z);
+        int u = find(x, z);
+        int v = find(y, z);
+        if(!check(x, u))add(x, u, 1), g[node(x, u)] = g[node(u, x)] = 1;
+        if(!check(y, v))add(y, v, 1), g[node(x, v)] = g[node(v, x)] = 1;
+        add(u, v, 0);
+    }
+    int ans = bfs();
+    if(ans == INF)ans = -2;
+    printf("%lld\n", ans / 2);
+    return 0;
+}
+~~~
+
+### F.Card Game for Three
+
+**Difficulty**: $\color{red} 3154$
+
+首先需要注意的是题目说的是$3 ^ { n + m + k }$ 种情况也就是说，最后拿完后，不止对应的是一种情况，首先转化问题，将其转化为只有$1, 2, 3$的序列，假设我们枚举游戏结束时，此时选了不是$1$的个数为$x$，此时这段序列长度为$x + n$，且此时肯定会有$n$个$1$以及末尾一定是$1$， 也就是：
+$$
+\dbinom{x + n - 1}{x} \sum_{y = 0}^x \dbinom{x}{y} [y \le m][x - y \le k]
+$$
+这个组合数的意义其实就是，在$x + n - 1$个可以随便选的位置中选$x$个位置填不是$1$的，然后再在这些位置中选填$2$还是$3$，接着将组合数求和转化为
+$$
+\begin{aligned}
+
+S(x) &= \sum_{x - k \le y \le m} \dbinom{x}{y} \\
+&= \sum_{x - k \le  y \le m} \dbinom{x - 1}{y} + \dbinom{x - 1}{y - 1} \\
+
+&= \sum_{x - k \le y \le m} \dbinom{x - 1}{y} + \sum_{x - k \le y \le m} \dbinom{x - 1}{y - 1} \\
+
+&= 2S(x - 1) - \dbinom{x - 1}{x - k - 1} - \dbinom{x - 1}{m}
+
+\end{aligned}
+$$
+
+这样就可以$O(n)$处理组合数求和，再考虑长度为$x$的序列对应的情况答案其实就是
+$$
+\sum_{x = 0} ^ {m + k} 3 ^ {m + k - x} \dbinom{x + n - 1}{x}S(x)
+$$
+
+$O(n)$计算即可。~~(tips: 取模意义下减法要加模数)~~
+
+~~~c++
+#include <bits/stdc++.h>
+
+using namespace std;
+
+#define int long long
+
+const int mod = 1e9 + 7;
+const int N = 1e6 + 10;
+
+int n, m, k;
+
+int S[N];
+
+int fac[N], ifac[N];
+
+int qpow(int a, int b)
+{
+    int t = 1;
+    while(b != 0)
+    {
+        if(b & 1)t = t * a % mod;
+        a = a * a % mod; b >>= 1;
+    }
+    return t;
+}
+
+int inv(int x)
+{
+    return qpow(x, mod - 2);
+}
+
+int C(int n, int m)
+{
+    if(n < m || n < 0 || m < 0)return 0;
+    return fac[n] % mod * ifac[m] % mod * ifac[n - m] % mod;
+}
+
+signed main()
+{
+    scanf("%lld%lld%lld", &n, &m, &k);
+    n = n + m + k;
+    fac[0] = ifac[0] = 1;
+    for(int i = 1; i <= n; i++)
+        fac[i] = fac[i - 1] * i % mod,
+        ifac[i] = inv(fac[i]);
+    S[0] = 1;
+    for(int i = 1; i <= n; i++)
+        S[i] = ((2 * S[i - 1] % mod - C(i - 1, i - k - 1) % mod - C(i - 1, m) % mod + mod) % mod + mod) % mod;
+    int ans = 0;
+    for(int i = 0; i <= m + k; i++)
+        ((ans += qpow(3, m + k - i) % mod * C(i + n - m - k - 1, i) % mod * S[i] % mod + mod) %= mod + mod) %= mod;
+    printf("%lld", ans);
+    return 0;
+}
+~~~
