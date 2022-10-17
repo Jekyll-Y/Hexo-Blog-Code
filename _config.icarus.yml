@@ -43,13 +43,13 @@ head:
     rss: 
 navbar:
     menu:
-        Home: /
-        Archives: /archives
-        Categories: /categories
-        Tags: /tags
-        About: /about
-        Friends: /friends
-        Comments: /comments
+        首页: /
+        归档: /archives
+        分类: /categories
+        标签: /tags
+        关于: /about
+        友链: /friends
+        留言: /comments
     links:
         Download on GitHub:
             icon: fab fa-github
@@ -167,6 +167,7 @@ widgets:
         type: links
         links:
             Hexo: https://hexo.io
+            icarus: https://ppoffice.github.io/hexo-theme-icarus/
     -
         position: left
         type: categories
