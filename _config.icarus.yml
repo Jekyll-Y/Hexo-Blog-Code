@@ -67,7 +67,7 @@ footer:
             url: https://github.com/ppoffice/hexo-theme-icarus
 article:
     highlight:
-        theme: Atom-One-Light
+        theme: monokai-sublime
         clipboard: true
         fold: folded
     readtime: true
