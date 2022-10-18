@@ -1147,3 +1147,47 @@ f_{i, j, k} = \sum_{p = i + 1} ^ j f_{i, p - 1, k}[x_p \ge k - 1] \sum_{t < k - 
 $$
 
 然后可以使用前缀和优化到$O(n^4)$。
+
+~~~c++
+#include <bits/stdc++.h>
+
+using namespace std;
+
+#define int long long
+
+const int N = 110;
+const int mod = 1e9 + 7;
+
+int n, x[N];
+
+int f[N][N][N];
+
+int g[N][N][N];
+
+signed main()
+{
+	scanf("%lld", &n);
+    x[1] = n + 1; n = n + 1;
+    for(int i = 2; i <= n; i++)
+        scanf("%lld", &x[i]);
+    for(int i = n; i >= 1; i--)
+    {
+        f[i][i][1] = 1;
+        for(int k = 1; k <= n; k++)
+            g[i][i][k] = (g[i][i][k - 1] + f[i][i][k]) % mod;
+        for(int j = i + 1; j <= n; j++)
+        {
+            for(int k = 2; k <= n && k <= x[i]; k++)
+            {
+                for(int mid = i + 1; mid <= j; mid++)
+                {
+                    f[i][j][k] = (f[i][j][k] + g[i][mid - 1][k] * f[mid][j][k - 1] % mod + f[i][mid - 1][k] * g[mid][j][k - 2] % mod * (x[mid] >= k - 1)) % mod;
+                }
+                g[i][j][k] = (g[i][j][k - 1] + f[i][j][k]) % mod;
+            }
+        }
+    }
+    printf("%lld", g[1][n][n]);
+    return 0;
+}
+~~~
