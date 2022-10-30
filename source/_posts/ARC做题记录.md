@@ -1191,3 +1191,719 @@ signed main()
     return 0;
 }
 ~~~
+
+
+## ARC062
+
+### C.AtCoDeer and Election Report
+
+**Difficulty** : $\color{cyan} 1346$
+
+直接按题意模拟即可。
+
+~~~c++
+#include <bits/stdc++.h>
+
+using namespace std;
+
+#define int long long
+
+const int N = 1e3 + 10;
+
+int n, a[N], b[N];
+
+int qpow(int a, int b)
+{
+    int t = 1;
+    while(b != 0)
+    {
+        if(b & 1)t = t * a;
+        a = a * a; b >>= 1;
+    }
+    return t;
+}
+
+signed main()
+{
+    scanf("%lld", &n);
+    a[0] = b[0] = 1;
+    for(int i = 1; i <= n; i++)
+    {
+        int x, y;
+        scanf("%lld%lld", &x, &y);
+        int k = max(a[i - 1] / x, b[i - 1] / y);
+        a[i] = k * x; b[i] = k * y;
+        while(a[i] < a[i - 1] || b[i] < b[i - 1])
+            a[i] += x, b[i] += y;
+    }
+    printf("%lld", a[n] + b[n]);
+    return 0;
+}
+~~~
+
+### D.AtCoDeer and Rock-Paper
+
+**Difficulty **: $\color{cyan} 1256$
+
+贪心选择即可。
+
+~~~c++
+#include <bits/stdc++.h>
+
+using namespace std;
+
+const int N = 1e5 + 10;
+
+int n;
+
+char s[N];
+
+int main()
+{
+    scanf("%s", s + 1);
+    n = strlen(s + 1);
+    int x = 0, y = 0, ans = 0;
+    for(int i = 1; i <= n; i++)
+    {
+        if(s[i] == 'p')
+        {
+            if(y + 1 <= x)
+            {
+                y++;
+            }
+            else x++, ans--;
+        }
+        else
+        {
+            if(y + 1 <= x)
+            {
+                y++;
+                ans++;
+            }
+            else x++;
+        }
+    }
+    printf("%d", ans);
+}
+~~~
+
+## ARC063
+
+### C.1D Reversi
+
+**Difficulty** : $\color{brown}755$
+
+判断有多少不同的段数。
+
+~~~c++
+#include <bits/stdc++.h>
+
+using namespace std;
+
+const int N = 1e5 + 10;
+
+char s[N];
+
+int main()
+{
+    scanf("%s", s + 1);
+    int n = strlen(s + 1);
+    int ans = 0;
+    for(int i = 2; i <= n; i++)
+    {
+        if(s[i] != s[i - 1])
+            ans++;
+    }
+    printf("%d", ans);
+    return 0;
+}
+~~~
+
+### D.An Invisible Hand
+
+**Difficulty** : $\color{cyan} 1376$
+
+逆序枚举选一遍最大的差，最后统计一下方案即可。
+
+~~~c++
+#include <bits/stdc++.h>
+
+using namespace std;
+
+const int N = 1e5 + 10;
+
+int n, m, a[N];
+
+int ans;
+
+int main()
+{
+    scanf("%d%d", &n, &m);
+    for(int i = 1; i <= n; i++)
+        scanf("%d", &a[i]);
+    int Max = 0, k = 0;
+    for(int i = n; i >= 1; i--)
+    {
+        Max = max(Max, a[i]);
+        k = max(k, Max - a[i]);
+    }
+    Max = 0;
+    for(int i = n; i >= 1; i--)
+    {
+        Max = max(Max, a[i]);
+        if(Max - a[i]== k)
+            ans++;
+    }
+    printf("%d", ans);
+    return 0;
+}
+~~~
+
+### E.Integers on a Tree
+
+**Difficulty** : $\color{yellow} 2198$
+
+不难想到一种构造方式就是维护一下当前的点权最小值，然后让与其相连的点为其点权$+1$，最后check一下就可以了。
+
+~~~c++
+#include <bits/stdc++.h>
+
+using namespace std;
+
+const int N = 1e5 + 10;
+const int INF = 0x3f3f3f3f;
+
+int n, m;
+
+int cnt, head[N];
+
+struct edge
+{
+    int to, nxt;
+    edge(int v = 0, int x = 0) : to(v), nxt(x) {}
+};
+
+edge e[N << 1];
+
+void add(int u, int v)
+{
+    e[++cnt] = edge(v, head[u]); head[u] = cnt;
+    e[++cnt] = edge(u, head[v]); head[v] = cnt;
+}
+
+int w[N];
+
+int res, check;
+
+int d[N], l[N], r[N];
+
+void dfs(int x, int fa)
+{
+    d[x] = d[fa] ^ 1;
+    for(int i = head[x]; i; i = e[i].nxt)
+    {
+        int v = e[i].to;
+        if(v == fa)continue;
+        dfs(v, x);
+        l[x] = max(l[x], l[v] - 1);
+        r[x] = min(r[x], r[v] + 1);
+    }
+    if(l[x] > r[x])check = 0;
+    if(w[x] != -1)
+    {
+        if(w[x] > r[x] || w[x] < l[x])
+            check = 0;
+        if(res == -1)res = (w[x] & 1) ^ d[x];
+        else if(res != ((w[x] & 1) ^ d[x]))
+            check = 0;
+        l[x] = r[x] = w[x];
+    }
+}
+
+void paint(int x, int fa)
+{
+    if(fa != 0)
+    {
+        if(w[fa] - 1 >= l[x] && w[fa] - 1 <= r[x])
+            w[x] = w[fa] - 1;
+        else w[x] = w[fa] + 1;
+    }
+    else w[x] = l[x];
+    for(int i = head[x]; i; i = e[i].nxt)
+    {
+        int v = e[i].to;
+        if(v == fa)continue;
+        paint(v, x);
+    }
+}
+
+void init()
+{
+    check = 1;
+    memset(w, -1, sizeof(w));
+    memset(l, -INF, sizeof(l));
+    memset(r, INF, sizeof(r));
+}
+
+int main()
+{
+    init();
+    scanf("%d", &n);
+    for(int i = 1, x, y; i < n; i++)
+    {
+        scanf("%d%d", &x, &y);
+        add(x, y);
+    }
+    scanf("%d", &m);
+    for(int i = 1, v, x; i <= m; i++)
+    {
+        scanf("%d%d", &v, &x);
+        w[v] = x;
+    }
+    res = -1;
+    dfs(1, 0);
+    if(!check)
+    {
+        printf("No\n");
+    }
+    else
+    {
+        printf("Yes\n");
+        paint(1, 0);
+        for(int i = 1; i <= n; i++)
+            printf("%d\n", w[i]);
+    }
+    return 0;
+}
+~~~
+
+### F.Snuke's Coloring 2
+
+**Difficulty** : $\color{red} 3688$
+
+就是找一个矩形使点不在矩形内，求矩形的周长，首先很容易想到的就是答案至少为$2 \max(W, H) + 2$， 我们可以直接枚举中线，进行分治， 复杂度为$O(n \log n)$。
+
+~~~c++
+#include <bits/stdc++.h>
+
+using namespace std;
+
+#define int long long
+
+const int N = 3e5 + 10;
+
+int n, W, H;
+
+struct Point
+{
+    int x, y;
+    Point(int a = 0, int b = 0) : x(a), y(b) {}
+    friend bool operator < (Point a, Point b)
+    {
+        return a.x == b.x ? a.y < b.y : a.x < b.x;
+    }
+};
+
+Point p[N];
+
+int ans, up[N], down[N];
+
+int m;
+
+int q[N], head, tail;
+
+void solve(int l, int r)
+{
+    if(l == r)return;
+    int mid = (l + r) >> 1;
+    solve(l, mid); solve(mid + 1, r);
+    int u = H, d = 0;
+    for(int i = mid; i >= l; i--)
+    {
+        up[i] = u; down[i] = d;
+        if(p[i].y <= m)
+            d = max(d, p[i].y);
+        else u = min(u, p[i].y);
+    }
+    u = H, d = 0;
+    for(int i = mid + 1; i <= r; i++)
+    {
+        up[i] = u, down[i] = d;
+        if(p[i].y <= m)
+            d = max(d, p[i].y);
+        else u = min(u, p[i].y);
+    }
+    int j = mid, s = W;
+    head = 1, tail = 0;
+    for(int i = mid + 1; i <= r; i++)
+    {
+        while(j >= l && up[j] >= up[i])
+        {
+            while(head <= tail && p[q[tail]].x + down[q[tail]] >= p[j].x + down[j])
+                tail--;
+            q[++tail] = j;
+            j--;
+        }
+        while(head <= tail && down[q[head]] <= down[i])
+        {
+            s = min(s, p[q[head]].x);
+            head++;
+        }
+        ans = max(ans, p[i].x - s + up[i] - down[i]);
+        if(head <= tail)
+            ans = max(ans, p[i].x + up[i] - (p[q[head]].x + down[q[head]]));
+    }
+}
+
+void getans()
+{
+    sort(p + 1, p + n + 1);
+    m = H >> 1;
+    p[0] = Point(0, 0);
+    p[n + 1] = Point(W, 0);
+    solve(0, n + 1);
+    reverse(p + 1, p + n + 1);
+    for(int i = 1; i <= n; i++)
+        p[i].x = W - p[i].x;
+    solve(0, n + 1);
+}
+
+signed main()
+{
+    scanf("%lld%lld%lld", &W, &H, &n);
+    for(int i = 1; i <= n; i++)
+    {
+        int x, y;
+        scanf("%lld%lld", &x, &y);
+        p[i] = Point(x, y);
+    }
+    getans();
+    swap(W, H);
+    for(int i = 1; i <= n; i++)
+        swap(p[i].x, p[i].y);
+    getans();
+    printf("%lld", ans << 1ll);
+    return 0;
+}
+~~~
+
+## ARC119
+
+### A.119 × 2^23 + 1
+
+**Difficulty** : $\color{cray} 69$
+
+直接暴力枚举。
+
+~~~c++
+#include <bits/stdc++.h>
+
+using namespace std;
+
+#define int long long
+
+const int mod = 998244353;
+
+int n;
+
+int ans = 1e18;
+
+signed main()
+{
+    scanf("%lld", &n);
+    for(int i = 63; i >= 0; i--)
+    {
+        int x = 1ll << i;
+        ans = min(ans, n / x + n % x + i);
+    }
+    printf("%lld", ans);
+    return 0;
+}
+~~~
+
+### B.Electric Board
+
+**Difficulty** : $\color{green} 1196$
+
+一个很显然的结论， 答案就是每个$0$的位置差不为$0$的和。
+
+~~~c++
+#include <bits/stdc++.h>
+
+using namespace std;
+
+const int N = 5e5 + 10;
+
+int n;
+
+char s[N];
+
+char t[N];
+
+int ans = 0;
+
+vector <int> a, b;
+
+int main()
+{
+    cin >> n >> s + 1 >> t + 1;
+    for(int i = 1; i <= n; i++)
+        if(s[i] == '0')a.push_back(i);
+    for(int i = 1; i <= n; i++)
+        if(t[i] == '0')b.push_back(i);
+    if(a.size() != b.size())
+        ans = -1;
+    else
+    {
+        for(int i = 0; i < a.size(); i++)
+            if(a[i] != b[i])ans++;
+    }
+    printf("%d", ans);
+    return 0;
+}
+~~~
+
+### C.ARC Wrecker 2
+
+**Difficulty** : $\color{cyan} 1354$
+
+其实就是统计偶数位置和奇数位置的和相加为$0$的个数。
+
+~~~c++
+#include <bits/stdc++.h>
+
+using namespace std;
+
+const int N = 3e5 + 10;
+
+#define int long long
+
+int n, a[N];
+
+int f[N], g[N];
+
+int ans;
+
+map <int, int> sum;
+
+signed main()
+{
+    scanf("%lld", &n);
+    for(int i = 1; i <= n; i++)
+        scanf("%lld", &a[i]);
+    for(int i = 1; i <= n; i++)
+    {
+        if(i & 1)
+            f[i] = f[i - 1] + a[i], g[i] = g[i - 1];
+        else
+            g[i] = g[i - 1] + a[i], f[i] = f[i - 1];
+    }
+    for(int i = 0; i <= n; i++)
+    {
+        ans += sum[f[i] - g[i]];
+        sum[f[i] - g[i]]++;
+    }
+    printf("%lld", ans);
+    return 0;
+}
+~~~
+
+### D. Grid Repainting 3
+
+**Difficulty** : $\color{orange} 2713$
+
+很经典的一个模型，可以根据行列分为左部点和右部点，建立二分图，然后分联通块统计答案即可。
+
+~~~c++
+#include <bits/stdc++.h>
+
+using namespace std;
+
+#define fir first
+#define sec second
+#define mpr make_pair
+#define int long long
+
+typedef pair <int, int> Pair;
+
+const int N = 2e7 + 10;
+
+int n, m;
+
+int cnt, head[N];
+
+struct edge
+{
+    int to, nxt;
+    edge(int v = 0, int x = 0) : to(v), nxt(x) {}
+};
+
+edge e[N << 1];
+
+void add(int u, int v)
+{
+    e[++cnt] = edge(v, head[u]); head[u] = cnt;
+    e[++cnt] = edge(u, head[v]); head[v] = cnt;
+}
+
+int a[5010][5010];
+
+int fa[N];
+
+Pair w[N];
+
+int find(int x)
+{
+    if(x == fa[x])return x;
+    return fa[x] = find(fa[x]);
+}
+
+void merge(int x, int y)
+{
+    if(find(x) == find(y))
+        return;
+    x = find(x), y = find(y);
+    fa[x] = y;
+    w[y].fir += w[x].fir;
+    w[y].sec += w[x].sec;
+}
+
+void init()
+{
+    for(int i = 1; i <= n; i++)
+        fa[i] = i, w[i] = mpr(1, 0);
+    for(int i = 1; i <= m; i++)
+        fa[i + n] = i + n, w[i + n] = mpr(0, 1);
+}
+
+int f(int x, int y)
+{
+    return x * m + y * n - x * y;
+}
+
+bool vis[N];
+
+vector <pair <Pair, int> > ans;
+
+void dfs(int x, int c)
+{
+    vis[x] = true;
+    for(int i = head[x]; i; i = e[i].nxt)
+    {
+        int v = e[i].to;
+        if(vis[v])continue;
+        if(!c)ans.push_back(mpr(mpr(x, v - n), 1));
+        else ans.push_back(mpr(mpr(v, x - n), 0));
+        dfs(v, c ^ 1);
+    }
+}
+
+signed main()
+{
+    scanf("%lld%lld", &n, &m);
+    for(int i = 1; i <= n; i++)
+    {
+        for(int j = 1; j <= m; j++)
+        {
+            char c; cin >> c;
+            a[i][j] = (c == 'R');
+        }
+    }
+    init();
+    for(int i = 1; i <= n; i++)
+        for(int j = 1; j <= m; j++)
+            if(a[i][j])add(i, j + n), merge(i, j + n);
+    int tot = 0; Pair x(0, 0);
+    for(int i = 1; i <= n + m; i++)
+    {
+        if(find(i) == i && w[i].fir + w[i].sec > 1)
+            tot++, x.fir += w[i].fir, x.sec += w[i].sec;
+    }
+    if(f(x.fir - tot, x.sec) > f(x.fir, x.sec - tot))
+    {
+        for(int i = 1; i <= n; i++)
+            if(!vis[i])dfs(i, 0);
+    }
+    else
+    {
+        for(int i = 1; i <= m; i++)
+            if(!vis[i + n])dfs(i + n, 1);
+    }
+    printf("%lld\n", ans.size());
+    reverse(ans.begin(), ans.end());
+    for(auto i : ans)
+        printf("%c %lld %lld\n", (i.sec ? 'Y' : 'X'), i.fir.fir, i.fir.sec);
+    return 0;
+}
+~~~
+
+### E.Pancakes
+
+**Difficulty** : $\color{orange} 2502$
+
+由于反转区间对中间的部分没有影响， 可以把绝对值拆开， 然后转化为一个二维偏序的形式。
+
+~~~c++
+#include <bits/stdc++.h>
+
+using namespace std;
+
+#define ll long long
+
+const int N = 3e5 + 10;
+const int INF = 2147483647;
+
+struct Point
+{
+    int x, y;
+    bool operator < (const Point &a) const{return x < a.x;}
+};
+
+Point p[N];
+
+int main()
+{
+    int n, lst;
+    scanf("%d%d", &n, &lst);
+    ll ans = 0;
+    for (int i = 2; i <= n; i++)
+    {
+        p[i - 1].x = lst;
+        scanf("%d", &lst);
+        p[i - 1].y = lst;
+        ans += abs(p[i - 1].x - lst);
+    }
+    int cur = 0;
+    for (int i = 1; i < n; i++)
+        cur = max(cur, abs(p[i].x - p[i].y) - abs(p[n - 1].y - p[i].x));
+    for (int i = 1; i < n; i++)
+        cur = max(cur, abs(p[i].x - p[i].y) - abs(p[1].x - p[i].y));
+    sort(p + 1, p + n);
+    for (int i = n - 1, x = INF; i >= 1; i--)
+    {
+        if (p[i].y <= p[i].x)
+        {
+            if (x <= p[i].y)
+                cur = max(cur, 2 * abs(p[i].x - p[i].y));
+            else if (x <= p[i].x)
+                cur = max(cur, 2 * abs(p[i].x - x));
+            x = min(x, p[i].y);
+        }
+        swap(p[i].x, p[i].y);
+    }
+    sort(p + 1, p + n);
+    for (int i = n - 1, x = INF; i >= 1; i--)
+    {
+        if (p[i].y <= p[i].x)
+        {
+            if (x <= p[i].y)
+                cur = max(cur, 2 * abs(p[i].x - p[i].y));
+            else if (x <= p[i].x)
+                cur = max(cur, 2 * abs(p[i].x - x));
+            x = min(x, p[i].y);
+        }
+    }
+    printf("%lld\n", ans - cur);
+    return 0;
+}
+~~~
