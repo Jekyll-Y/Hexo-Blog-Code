@@ -1243,7 +1243,7 @@ signed main()
 
 ### D.AtCoDeer and Rock-Paper
 
-**Difficulty **: $\color{cyan} 1256$
+**Difficulty**: $\color{cyan} 1256$
 
 贪心选择即可。
 
@@ -1904,6 +1904,140 @@ int main()
         }
     }
     printf("%lld\n", ans - cur);
+    return 0;
+}
+~~~
+
+## ARC112
+
+### F.Die Siedler
+
+**Difficulty** : $\color{red} 3432$
+
+考虑转化问题，将每个位置的卡牌转移到第一个位置上来，首先对于这种转化方式容易得到其得到满足要求的序列所需的最小步数，是与原序列是等价的，同时对于每种卡包， 也用相同的转化方式，然后相加减的答案就是原序列的答案。
+
+对于一个长度为$n$的序列，其转化即为
+
+$$
+\sum_{i = 1} ^n a_i 2 ^ {i - 1} (i - 1) !
+$$
+
+然后考虑已知这种表达方式如何求解，其实只要贪心即可，去倒着填，对于第一个位置的数，其可以减少若干倍的$2 ^ n n! - 1$(转化一周)， 也就是说，最后所有卡牌转为为第一个位置的时候，答案可以表示为，
+$$
+v = R + \sum_{i = 1} ^ n b_i x_i - y (2 ^ n n! - 1)
+$$
+裴蜀定理解出即可， 然后考虑到数据范围，需要使用根号分治，当$d < \sqrt {2 ^ n n !}$时，直接暴力枚举，$d \le \sqrt {2 ^n n!}$时，根据转移，可以跑同余最短路，然后问题就解决了。
+
+~~~c++
+#include <bits/stdc++.h>
+
+using namespace std;
+
+#define int long long
+
+const int N = 18;
+const int M = 60;
+const int INF = 1e18;
+const int K = 1.5e6 + 10;
+
+int n, m;
+
+int a[N], s[M][N];
+
+int fac[N], t[N];
+
+int S[M];
+
+int lim;
+
+int b[N];
+
+void init()
+{
+    fac[0] = t[0] = 1;
+    for(int i = 1; i <= n; i++)
+        t[i] = t[i - 1] * 2;
+    for(int i = 1; i <= n; i++)
+        fac[i] = fac[i - 1] * i;
+}
+
+int f(int *a)
+{
+    int sum = 0;
+    for(int i = 1; i <= n; i++)
+        sum += a[i] * t[i - 1] * fac[i - 1];
+    return sum;
+}
+
+int calc(int A)
+{
+    int sum = A, s = 0;
+    for(int i = n; i >= 1; i--)
+    {
+        s += sum / (t[i - 1] * fac[i - 1]);
+        sum %= (t[i - 1] * fac[i - 1]);
+    }
+    return s;
+}
+
+int gcd(int a, int b){return b == 0 ? a : gcd(b, a % b);}
+
+int dis[K];
+
+int d;
+
+int spfa(int T)
+{
+    memset(dis, 0x3f3f3f3f, sizeof(dis));
+    queue <int> q;
+    for(int i = 1; i <= n; i++)
+    {
+        int x = t[i - 1] * fac[i - 1] % d;
+        dis[x] = 1; q.push(x);
+    }
+    while(!q.empty())
+    {
+        int x = q.front();q.pop();
+        for(int i = 1; i <= n; i++)
+        {
+            int v = (x + t[i - 1] * fac[i - 1]) % d;
+            if(dis[x] + 1 < dis[v])
+            {
+                dis[v] = dis[x] + 1;
+                q.push(v);
+            }
+        }
+    }
+    return dis[T];
+}
+
+signed main()
+{
+    scanf("%lld%lld", &n, &m);
+    for(int i = 1; i <= n; i++)
+        scanf("%lld", &a[i]);
+    for(int i = 1; i <= m; i++)
+        for(int j = 1; j <= n; j++)
+            scanf("%lld", &s[i][j]);
+    init();
+    for(int i = 1; i <= m; i++)
+        S[i] = f(s[i]);
+    lim = t[n] * fac[n] - 1;
+    d = lim;
+    for(int i = 1; i <= m; i++)
+        d = gcd(S[i], d);
+    int ans = INF;
+    if(d >= lim / d)
+    {
+        for(int i = f(a) % d; i <= lim; i += d)
+            if(i) ans = min(ans, calc(i));
+    }
+    else
+    {
+        ans = INF; int A = f(a);
+        ans = min(ans, spfa(A % d));
+    }
+    printf("%lld", ans);
     return 0;
 }
 ~~~
