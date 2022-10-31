@@ -2041,3 +2041,375 @@ signed main()
     return 0;
 }
 ~~~
+
+## ARC116
+
+### A.Odd vs Even
+
+**Difficulty** : $\color{gray} 155$
+
+分情况讨论一下，不难得出当$n$为奇数时，$odd > even$， 当$n$不是$4$的倍数时此时$odd = even$， 否则$odd < even$，其实质因数分解一下就可以看出来。
+
+~~~c++
+#include <bits/stdc++.h>
+
+using namespace std;
+
+#define ll long long
+
+int main()
+{
+    int T; scanf("%d", &T);
+    while(T--)
+    {
+        ll n; scanf("%lld", &n);
+        if(n & 1)
+            cout << "Odd" << endl;
+        else if(n % 4 != 0)
+            cout << "Same" << endl;
+        else
+            cout << "Even" << endl;
+    }
+    return 0;
+}
+~~~
+
+### B.Products of Min-Max
+
+**Difficulty** : $\color{green} 816$
+
+可以考虑排序后固定最大值，然后统计贡献即可。
+
+~~~c++
+#include <bits/stdc++.h>
+
+using namespace std;
+
+#define ll long long
+
+const int N = 2e5 + 10;
+const int mod = 998244353;
+const int INF = 1e9;
+
+int n, a[N];
+
+int main()
+{
+    scanf("%d", &n);
+    for(int i = 1; i <= n; i++)
+        scanf("%d", &a[i]);
+    sort(a + 1, a + n + 1);
+    ll ans = 0, sum = 0;
+    for(int i = 1; i <= n; i++)
+    {
+        ans = (ans + a[i] * (sum + a[i]) % mod) % mod;
+        sum = sum * 2ll % mod; sum = (sum + a[i]) % mod;
+    }
+    printf("%lld", ans);
+    return 0;
+}
+~~~
+
+### C.Multiple Sequences
+
+**Difficulty** : $\color{cyan} 1468$
+
+首先注意到$m \le 2 \times 10 ^ 5$，分解后质因子数最多为$6$个，然后考虑枚举最后一个数为多少，将其质因数分解，然后先计算每个质因数指数分配的情况然后相乘，这时候等价于在$n$个相同的盒子中放$m$个不同的小球，方案数为$\dbinom{n +m - 1}{n}$，然后将每个质因数的答案乘起来就好了。时间复杂度$O(n \sqrt n)$。
+
+~~~c++
+#include <bits/stdc++.h>
+
+using namespace std;
+
+#define ll long long
+
+const int N = 2e5 + 10;
+const int mod = 998244353;
+
+int n, m;
+
+ll ans;
+
+ll qpow(ll a, ll b)
+{
+    ll t = 1;
+    while(b != 0)
+    {
+        if(b & 1)t = t * a % mod;
+        a = a * a % mod; b >>= 1;
+    }
+    return t;
+}
+
+ll inv(ll x)
+{
+    return qpow(x, mod - 2);
+}
+
+ll fac[N + 100], ifac[N + 100];
+
+ll C(int n, int m)
+{
+    if(n < m)return 0;
+    return fac[n] % mod * ifac[m] % mod * ifac[n - m] % mod;
+}
+
+int main()
+{
+    scanf("%d%d", &n, &m);
+    fac[0] = ifac[0] = 1;
+    for(ll i = 1; i <= N + 99; i++)
+        fac[i] = fac[i - 1] * i % mod;
+    for(int i = 1;i <= N + 99; i++)
+        ifac[i] = inv(fac[i]);
+    for(int i = 1; i <= m; i++)
+    {
+        int x = i; ll mul = 1;
+        for(int j = 2; j * j <= x; j++)
+        {
+            if(x % j != 0)continue;
+            int sum = 0;
+            while(x % j == 0)
+                sum++, x /= j;
+            mul = mul * C(n + sum - 1, sum) % mod;
+        }
+        if(x != 1)mul = mul * 1ll * n % mod;
+        ans = (ans + mul) % mod;
+    }
+    printf("%lld", ans);
+    return 0;
+}
+~~~
+
+### D.I Wanna Win The Game
+
+**Difficulty** : $\color{blue} 1718$
+
+考虑设$f_{i,j}$表示枚举到第$i$个二进制位，此时权值和为$j$的方案数，然后直接转移即可，需要保证每个二进制位的$1$的个数为偶数。
+
+~~~c++
+#include <bits/stdc++.h>
+
+using namespace std;
+
+#define ll long long
+
+const int N = 5100;
+const int mod = 998244353;
+
+int n, m;
+
+ll fac[N], ifac[N];
+
+ll qpow(ll a, ll b)
+{
+    ll t = 1;
+    while(b != 0)
+    {
+        if(b & 1)t = t * a % mod;
+        a = a * a % mod; b >>= 1;
+    }
+    return t;
+}
+
+ll inv(ll x)
+{
+    return qpow(x, mod - 2);
+}
+
+ll f[15][N];
+
+ll C(int n, int m)
+{
+    return fac[n] % mod * ifac[m] % mod * ifac[n - m] % mod;
+}
+
+int main()
+{
+    scanf("%d%d", &n, &m);
+    fac[0] = ifac[0] = 1;
+    for(int i = 1; i <= n; i++)
+        fac[i] = fac[i - 1] * 1ll * i % mod;
+    for(int i = 1; i <= n; i++)
+        ifac[i] = inv(fac[i]);
+    f[0][0] = 1;
+    for(int i = 1; i <= 14; i++)
+    {
+        for(int j = 0; j <= m; j++)
+        {
+            for(int k = 0; k <= n; k += 2)
+            {
+                int x = j - (1 << (i - 1)) * k;
+                if(x < 0)break;
+                f[i][j] = (f[i][j] + f[i - 1][x] * C(n, k) % mod) % mod;
+            }
+        }
+    }
+    printf("%lld", f[14][m]);
+    return 0;
+}
+~~~
+
+### E.Spread of Information
+
+**Difficulty** : $\color{yellow} 2236$
+
+直接二分判定时间， 然后贪心，选取点，设$f_i$表示节点$i$到其子树内最近的初始被覆盖的点的距离，$g_i$表示其到子树被最远的没被覆盖住的点的距离。
+
+~~~c++
+#include <bits/stdc++.h>
+
+using namespace std;
+
+const int N = 2e5 + 10;
+const int INF = 1e9;
+
+int cnt, head[N];
+
+struct edge
+{
+    int to, nxt;
+    edge(int v = 0, int x = 0) : to(v), nxt(x) {}
+};
+
+edge e[N << 1];
+
+void add(int u, int v)
+{
+    e[++cnt] = edge(v, head[u]); head[u] = cnt;
+    e[++cnt] = edge(u, head[v]); head[v] = cnt;
+}
+
+int n, m;
+
+int tot;
+
+int f[N], g[N];
+
+void dfs(int x, int fa, int lim)
+{
+    f[x] = INF; g[x] = 0;
+    for(int i = head[x]; i; i = e[i].nxt)
+    {
+        int v = e[i].to;
+        if(v == fa)continue;
+        dfs(v, x, lim);
+        f[x] = min(f[x], f[v] + 1);
+        g[x] = max(g[x], g[v] + 1);
+    }
+    if(f[x] + g[x] <= lim)
+        g[x] = -INF;
+    else if(g[x] == lim)
+    {
+        f[x] = 0; g[x] = -INF;
+        tot++;
+    }
+}
+
+bool check(int x)
+{
+    tot = 0; dfs(1, 0, x);
+    if(g[1] >= 0)tot++;
+    return tot <= m;
+}
+
+int main()
+{
+    scanf("%d%d", &n, &m);
+    for(int i = 1; i < n; i++)
+    {
+        int x, y;
+        scanf("%d%d", &x, &y);
+        add(x, y);
+    }
+    int l = 0, r = n;
+    while(l <= r)
+    {
+        int mid = (l + r) >> 1;
+        if(check(mid))
+            r = mid - 1;
+        else l = mid + 1;
+    }
+    printf("%d", l);
+    return 0;
+}
+~~~
+
+### F.Deque Game
+
+**Difficulty** : $\color{red} 3125$
+
+首先考虑只有一个序列的情况此时设长度为$n$，假如$n$为偶数，此时很明显答案就是$\max(a[n / 2], a[n / 2 + 1])$，或$\min(a[n/ 2], a[n / 2 + 1])$若$n$为奇数此时答案为$\max(\min(a[n / 2], a[n / 2 + 1]), \min(a[n / 2 + 1], a[n / 2 + 2]))$或$\min(\max(a[n / 2], a[n / 2 + 1]), \max(a[n / 2 + 1], a[n / 2 + 2]))$，依据先后手来决定。然后将其拓展到多个序列，首先考虑所有的序列长度均为奇数， 此时先后手不会被改变，直接按照先手的取值求和即可，但是如若出现长度为偶数的序列， 此时就会出现，先后手交换的情况，此时需要使用优先队列去维护一下，对于每个长度为偶数的序列其带来的影响，最后求和即可。
+
+~~~c++
+#include <bits/stdc++.h>
+
+using namespace std;
+
+#define ll long long
+
+const int N = 2e5 +10;
+
+int n;
+
+vector <int> a[N];
+
+int m[N];
+
+int v[N];
+
+ll ans;
+
+int res;
+
+int calc(int x, int n)
+{
+    if(n == 2)
+        return x == 0 ? v[2] : v[1];
+    if(!res)
+        return max(min(v[n / 2 + x], v[n / 2 + 1 + x]), min(v[n / 2 + 1 + x], v[n / 2 + 2 + x]));
+    else
+        return min(max(v[n / 2 + x], v[n / 2 + 1 + x]), max(v[n / 2 + 1 + x], v[n / 2 + 2 + x]));
+}
+
+int main()
+{
+    scanf("%d", &n);
+    for(int i = 1; i <= n; i++)
+    {
+        scanf("%d", &m[i]);
+        for(int j = 1; j <= m[i]; j++)
+        {
+            int x; scanf("%d", &x);
+            a[i].push_back(x);
+        }
+        if(!(m[i] & 1))res ^= 1;
+    }
+    priority_queue <int> q;
+    for(int i = 1; i <= n; i++)
+    {
+        for(int j = 1; j <= m[i]; j++)
+            v[j] = a[i][j - 1];
+        if(m[i] & 1)
+        {
+            if(m[i] == 1)
+                ans += v[1];
+            else
+                ans += calc(0, m[i]);
+        }
+        else
+        {
+            q.push(max(calc(-1, m[i]), calc(0, m[i])) - min(calc(-1, m[i]), calc(0, m[i])));
+            ans += min(calc(-1, m[i]), calc(0, m[i]));
+        }
+    }
+    while(!q.empty())
+    {
+        ans += q.top(); q.pop();
+        if(!q.empty())q.pop();
+    }
+    printf("%lld\n", ans);
+    return 0;
+}
+~~~
+
