@@ -6,8 +6,7 @@ tags:
 - 线段树
 categories:
 - 题解
-cover: https://s2.loli.net/2022/09/14/5hYJioHOEjdBK3I.png
-thumbnail: https://s2.loli.net/2022/09/14/5hYJioHOEjdBK3I.png
+
 toc: true
 ---
 

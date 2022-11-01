@@ -4,8 +4,7 @@ date: 2022-06-13 22:44:55
 tags: 
 - 图论
 - Kruskal重构树
-cover: https://s2.loli.net/2022/08/18/xhXHtL1yarSJQ8b.jpg
-thumbnail: https://s2.loli.net/2022/08/18/xhXHtL1yarSJQ8b.jpg
+
 categories : 
 - 学习笔记
 toc: true

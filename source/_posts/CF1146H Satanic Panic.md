@@ -6,8 +6,7 @@ tags:
 - 动态规划
 categories:
 - 题解
-cover : https://s2.loli.net/2022/08/24/yFzSXCfYNbr6GAg.jpg
-thumbnail: https://s2.loli.net/2022/08/24/yFzSXCfYNbr6GAg.jpg
+
 toc: true
 ---
 
