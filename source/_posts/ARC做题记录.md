@@ -4,8 +4,6 @@ date: 2022-10-13 15:56:00
 tags: 
 - AtCoder Regular Contest
 - Record
-cover: https://s2.loli.net/2022/10/13/F875eDMpca4zy9q.png
-thumbnail: https://s2.loli.net/2022/10/13/F875eDMpca4zy9q.png
 toc: true
 categories : 
 - 做题记录
