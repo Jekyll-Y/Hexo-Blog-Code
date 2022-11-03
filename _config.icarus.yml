@@ -121,9 +121,9 @@ comment:
 #     -
 #         type: wechat
 #         qrcode: ''
-# share:
-#     type: sharethis
-#     install_url: ''
+share:
+    type: sharejs
+    # install_url: ''
 sidebar:
     left:
         sticky: false
