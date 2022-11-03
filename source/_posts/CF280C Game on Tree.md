@@ -17,9 +17,7 @@ toc: true
 ---
 
 
-
 CF280C Game on Tree
-
 
 
 <!--more-->
