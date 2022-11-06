@@ -78,7 +78,7 @@ if (canvasEl) {
 		pointerX = 0,
 		pointerY = 0,
 		tap = "mousedown",
-		colors = ["#FF1461", "#18FF92", "#5A87FF", "#FBF38C"],
+		colors = ["#F19EC2", "#6D77B3", "#F97E72", "#72F1B8"],
 		setCanvasSize = debounce(function() {
 			canvasEl.width = 2 * window.innerWidth, canvasEl.height = 2 * window.innerHeight, canvasEl.style.width = window.innerWidth + "px", canvasEl.style.height = window.innerHeight + "px", canvasEl.getContext("2d").scale(2, 2)
 		}, 500),
