@@ -4,9 +4,6 @@ date: 2022-06-29 22:45:12
 tags: 
 - 旋转卡壳
 - 计算几何
-cover: https://s2.loli.net/2022/08/18/txvCwgc3KP296XM.png
-
-thumbnail: https://s2.loli.net/2022/08/18/txvCwgc3KP296XM.png
 categories : 
 - 题解
   
