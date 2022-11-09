@@ -48,7 +48,7 @@ $$
 \left \{
 \begin{aligned}
 &f_{x, 0} = g_{x, 0} + \max(f_{son, 1}, f_{son, 0})\\
-&f_{x, 1} = g_{x, 1} + f_{son, 0}
+&f_{x, 1} = g_{x, 1} + f_{son, 0} \\
 \end{aligned}
 \right.
 $$
@@ -56,18 +56,18 @@ $$
 $$
 \begin{bmatrix}
 g_{x, 0} & g_{x, 0} \\
-g_{x, 1} & -\infty
+g_{x, 1} & -\infty \\
 \end{bmatrix}
 \times 
 \begin{bmatrix}
 f_{son, 0} \\ 
-f_{son, 1}
+f_{son, 1} \\
 \end{bmatrix}
  = 
 
 \begin{bmatrix}
 f_{x,0} \\
-f_{x, 1}
+f_{x, 1} \\
 \end{bmatrix}
 $$
 线段树维护即可，每次查询查询当前节点所咋重链的答案即可。
@@ -290,17 +290,17 @@ $$
 $$
 \begin{bmatrix}
 g_{x,1} &g_{x, 1} \\
-g_{x, 0} & + \infty
+g_{x, 0} & + \infty \\
 \end{bmatrix}
 \times
 \begin{bmatrix}
 f_{son,0} \\
-f_{son,1}
+f_{son,1} \\
 \end{bmatrix}
 =
 \begin{bmatrix}
 f_{x, 1} \\
-f_{x, 0}
+f_{x, 0} \\
 \end{bmatrix}
 $$
 然后维护一下就可以了。
@@ -518,17 +518,17 @@ $$
 $$
 \begin{bmatrix}
 g_x & w_x \\
-0 & 0
+0 & 0 \\
 \end{bmatrix}
 \times
 \begin{bmatrix}
 f_{son} \\
-0
+0 \\
 \end{bmatrix}
 =
 \begin{bmatrix}
 f_x \\ 
-0
+0 \\
 \end{bmatrix}
 $$
 简单维护一下即可。
