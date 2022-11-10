@@ -4,7 +4,7 @@ tag: about
 ---
 # About
 
-## Hi there is Jekyll👋, A OIer's blog.
+## Hi there is Jekyll👋, a OIer's blog.
 
 <img src="https://ghchart.rshah.org/F19EC2/Jekyll-Y" />
 
