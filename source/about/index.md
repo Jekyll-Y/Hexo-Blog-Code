@@ -4,15 +4,17 @@ tag: about
 ---
 # About
 
+## Hi there is Jekyll👋
 
-**一个OIer的小窝>_<**
+<img src="https://ghchart.rshah.org/F19EC2/Jekyll-Y" />
 
-- [luogu](https://www.luogu.com.cn/user/239160)
+This is my [blog](https://jekyll-y.github.io/), Welcome!
 
-- [codeforces](https://codeforces.com/profile/Jekyll-Y)
+[![Mail Badge](https://img.shields.io/badge/-2899309225@qq.com-c14438?style=flat&logo=Gmail&logoColor=white&link=mailto:2899309225@qq.com)](mailto:2899309225@qq.com)
+[![Github Badge](https://img.shields.io/badge/-Jekyll-grey?style=flat&logo=github&logoColor=white&link=https://github.com/Jekyll-Y/)](https://www.github.com/Jekyll-Y/)
 
-- [ATCoder](https://atcoder.jp/users/Jekyll_Y)
+## Some of my Github Stats
+<p align=left> <img src=https://komarev.com/ghpvc/?username=Jekyll-Y alt=Jekyll-Y /> </p>
 
-- [LibreOJ](https://loj.ac/u/Jekyll_Y)
+![Jekyll-Y's GitHub stats](https://github-readme-stats.vercel.app/api?username=Jekyll-Y&show_icons=true&theme=dracula)
 
-![](https://s2.loli.net/2022/07/14/E2GOQRZFI4LnywK.png)
