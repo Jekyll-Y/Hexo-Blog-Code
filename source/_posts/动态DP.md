@@ -272,8 +272,8 @@ int main()
 $$
 \left \{
 \begin{aligned}
-&f_{x, 0} = f_{x, 0} + \sum f_{x , 1} \\
-&f_{x, 1} = f_{x, 1} + \sum \min(f_{x, 0}, f_{x, 1}) + c_x
+&f_{x, 0} = f_{x, 1} + \sum f_{x , 1} \\
+&f_{x, 1} = f_{x, 0} + \sum \min(f_{x, 0}, f_{x, 1}) + c_x
 \end{aligned}
 \right.
 $$
