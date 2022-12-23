@@ -160,7 +160,7 @@ $$
 
 （upd：这里的叉积定义感觉不太严谨，毕竟在数学中一般定义$\left\langle a,b \right\rangle \in [0,\pi]$,这里显然$\in[0,2 \pi]$，但这可以帮助我们推出坐标表示下的公式）
 
-并且，$\vec{a}×\vec{b}=(x_1y_2-x_2y_2)$。
+并且，$\vec{a}×\vec{b}=(x_1y_2-x_2y_1)$。
 
 ![](https://s2.loli.net/2022/06/22/jBZAz1YEpVd4Me7.gif)
 
