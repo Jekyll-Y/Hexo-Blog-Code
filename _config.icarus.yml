@@ -182,7 +182,7 @@ widgets:
         type: tags
         order_by: name
         amount: 
-        show_count: true
+        show_count: false
     -
         position: left
         type: subscribe_email
