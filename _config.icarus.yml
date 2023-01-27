@@ -175,7 +175,7 @@ widgets:
         position: right
         type: recent_posts
     -
-        position: right
+        position: left
         type: archives
     # -
     #     position: right
