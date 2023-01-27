@@ -4,8 +4,7 @@ date: 2022-06-13 22:56:05
 tags: 
 - 搜索
 - 启发式搜索
-cover: https://s2.loli.net/2022/08/15/lUwZ8HLvqFO6B2p.png
-thumbnail: https://s2.loli.net/2022/08/15/lUwZ8HLvqFO6B2p.png
+
 toc: true
 categories : 
 - 学习笔记

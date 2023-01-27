@@ -7,8 +7,7 @@ tags:
 categories:
 - Hexo
 toc: true
-cover: https://s2.loli.net/2022/10/12/6UcdDGSAHrwlvi1.png
-thumbnail : https://s2.loli.net/2022/10/12/6UcdDGSAHrwlvi1.png
+
 ---
 
 使用GitHub Actions 持续集成部署Hexo

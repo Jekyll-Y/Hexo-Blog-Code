@@ -5,8 +5,7 @@ tags:
 - 组合数学
 categories:
 - 学习笔记
-cover: https://s2.loli.net/2022/08/28/XKI6cPs3JWRptZo.jpg
-thumbnail: https://s2.loli.net/2022/08/28/XKI6cPs3JWRptZo.jpg
+
 toc: true
 ---
 

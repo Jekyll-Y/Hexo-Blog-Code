@@ -6,8 +6,7 @@ tags:
 - NaCly_Fish's Math Contest
 categories :
 - 题解
-cover: https://s2.loli.net/2022/10/03/sQbVXWKpURBPlCZ.png
-thumbnail: https://s2.loli.net/2022/10/03/sQbVXWKpURBPlCZ.png
+
 toc: true
 ---
 

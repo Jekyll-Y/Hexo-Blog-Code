@@ -12,9 +12,7 @@ tags:
   - 扫描线
   - 偏序问题
   - Pick定理
-cover: https://s2.loli.net/2022/07/14/q2nOVB93d5wehAc.png
 
-thumbnail: https://s2.loli.net/2022/07/14/q2nOVB93d5wehAc.png
 
 toc: true
 categories:

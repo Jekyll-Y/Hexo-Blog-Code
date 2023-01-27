@@ -8,8 +8,7 @@ tags:
 - 动态树
 categories:
 - 学习笔记
-cover: https://s2.loli.net/2022/09/14/IEL8cQdYf4yF21G.jpg
-thumbnail: https://s2.loli.net/2022/09/14/IEL8cQdYf4yF21G.jpg
+
 toc: true
 ---
 

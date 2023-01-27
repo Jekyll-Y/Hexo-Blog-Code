@@ -4,8 +4,7 @@ date: 2022-07-19 19:36:03
 tags: 
 - 数论
 - 组合数学
-cover: https://s2.loli.net/2022/08/15/sAJ6ovVGSau5E9I.png
-thumbnail: https://s2.loli.net/2022/08/15/sAJ6ovVGSau5E9I.png
+
 categories : 
 - 学习笔记
 toc: true

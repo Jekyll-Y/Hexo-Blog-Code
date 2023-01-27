@@ -4,8 +4,7 @@ date: 2022-07-24 08:27:30
 tags:
 - 数论
 - BSGS
-cover: https://s2.loli.net/2022/08/15/e8XTFSE6tnVmJZW.jpg
-thumbnail: https://s2.loli.net/2022/08/15/e8XTFSE6tnVmJZW.jpg
+
 categories : 
 - 学习笔记
 toc: true
