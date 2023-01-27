@@ -177,12 +177,12 @@ widgets:
     -
         position: right
         type: archives
-    -
-        position:
-        type: tags
-        order_by: name
-        amount: 
-        show_count: false
+    # -
+    #     position: right
+    #     type: tags
+    #     order_by: name
+    #     amount: 
+    #     show_count: false
     -
         position: left
         type: subscribe_email
